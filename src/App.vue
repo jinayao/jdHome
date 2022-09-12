@@ -24,7 +24,7 @@ import HomeItem from '@/views/homeItem.vue'
 </script>
 
 <style lang="scss">
-@import "./style/viriabes.scss";
+@import './style/viriabes.scss';
 // 底部导航样式
 .docker {
   display: flex;

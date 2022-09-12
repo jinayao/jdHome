@@ -27,6 +27,24 @@
         </van-swipe>
       </div>
       <!-- 轮播图结束-->
+      <div class="wrapper__grid">
+        <van-grid square :column-num="4">
+          <van-grid-item
+            v-for="value in 8"
+            :key="value"
+            icon="photo-o"
+            text="文字"
+          />
+        </van-grid>
+        <van-grid square :column-num="4">
+          <van-grid-item
+            v-for="value in 8"
+            :key="value"
+            icon="photo-o"
+            text="文字"
+          />
+        </van-grid>
+      </div>
     </div>
     <!-- 主体内容结束 -->
   </div>
@@ -40,8 +58,8 @@ const images = [
 </script>
 
 <style lang="scss" scoped>
-@import "../style/viriabes.scss";
-@import "../style/mixin.scss";
+@import '../style/viriabes.scss';
+@import '../style/mixin.scss';
 // 主体内容样式
 .wrapper {
   position: absolute;
@@ -80,10 +98,20 @@ const images = [
     }
   }
   &__banner {
-    margin-top: 0.1rem;
+    margin: 0.1rem 0;
     img {
       width: 100%;
       height: 100%;
+    }
+  }
+  &__grid{
+    display: flex;
+    width: 100%;
+    height: 1.7rem;
+    overflow: auto;
+    .van-grid{
+      width: 100%;
+      flex-shrink: 0;
     }
   }
 }
