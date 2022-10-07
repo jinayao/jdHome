@@ -26,6 +26,10 @@ const routes = [{
     name: 'income',
     path: 'income',
     component: () => import('@/views/Income.vue')
+  }, {
+    name: 'addIncome',
+    path: 'addIncome',
+    component: () => import('@/views/AddIncome.vue')
   }]
 },
 {

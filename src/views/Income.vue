@@ -36,7 +36,7 @@
             </van-list>
         </van-pull-refresh>
         <div class="income__add">
-            <van-button icon="plus" type="primary" round />
+            <van-button icon="plus" type="primary" round @click="addIncome"/>
         </div>
     </div>
 </template>
@@ -44,6 +44,7 @@
 <script>
 import { ref } from 'vue'
 import { Toast } from 'vant'
+import { useRouter } from 'vue-router'
 // 选择相关操作
 const useSelectEffect = () => {
   const selectValue = ref('全部')
@@ -93,9 +94,11 @@ const useListEffect = () => {
 }
 export default {
   setup () {
+    const router = useRouter()
     const onClickLeft = () => history.back()
     const { list, loading, finished, refreshing, onLoad, onRefresh } = useListEffect()
     const { selectValue, columns, showPicker, onConfirm, onCancel } = useSelectEffect()
+    const addIncome = ()=> router.push({name:'addIncome'})
     return {
       list,
       onLoad,
@@ -108,7 +111,8 @@ export default {
       onCancel,
       onConfirm,
       showPicker,
-      selectValue
+      selectValue,
+      addIncome
     }
   }
 }
