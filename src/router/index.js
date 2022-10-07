@@ -12,7 +12,7 @@ const routes = [{
 {
   name: 'index',
   path: '/index',
-  component: () => import('@/views/index.vue'),
+  component: () => import('@/views/Index.vue'),
   children: [{
     path: '',
     redirect: {
@@ -22,6 +22,10 @@ const routes = [{
     name: 'home',
     path: 'home',
     component: () => import('@/views/Home.vue')
+  }, {
+    name: 'income',
+    path: 'income',
+    component: () => import('@/views/Income.vue')
   }]
 },
 {
@@ -37,22 +41,16 @@ const router = createRouter({
 })
 router.beforeEach((to, from, next) => {
   const token = sessionStorage.getItem('token')
-  if (to.path === '/login') {
-    if (token) {
-      router.push({
-        name: 'home'
-      })
-    }
-    next()
-  } else {
-    if (!token) {
-      router.push({
-        name: 'login'
-      })
-    }
-
-    next()
+  if (to.path === '/login' && token) {
+    router.push({
+      name: 'home'
+    })
+  } else if (to.path !== '/login' && !token) {
+    router.push({
+      name: 'login'
+    })
   }
+  next()
 })
 
 export default router

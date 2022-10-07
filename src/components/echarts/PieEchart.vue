@@ -16,8 +16,8 @@ const pieEchartEffect = (dataValue, title) => {
       textStyle: {
         fontSize: 10
       },
-      left: '35%',
-      top:'10'
+      left: '28%',
+      top: '10'
     },
     tooltip: {
       show: false
@@ -30,7 +30,8 @@ const pieEchartEffect = (dataValue, title) => {
       orient: 'horizontal',
       textStyle: {
         fontSize: 8
-      }
+      },
+      itemGap: 4
     },
     series: []
   })

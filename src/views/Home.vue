@@ -10,15 +10,15 @@
         </div>
         <div class="home__grid">
             <van-grid :border="false">
-                <van-grid-item icon="photo-o" text="支出">
+                <van-grid-item icon="photo-o" text="收入" :to="{name:'income'}">
                     <van-image width="0.2rem" height="0.2rem"
                         src="https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg" />
-                    <p>收入</p>
+                    <p>收支</p>
                 </van-grid-item>
                 <van-grid-item icon="photo-o" text="支出">
                     <van-image width="0.2rem" height="0.2rem"
                         src="https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg" />
-                    <p>支出</p>
+                    <p>暂定</p>
                 </van-grid-item>
                 <van-grid-item icon="photo-o" text="支出">
                     <van-image width="0.2rem" height="0.2rem"
@@ -67,8 +67,10 @@ export default {
     const dataValue2 = reactive([
       { value: 80, name: '购物' },
       { value: 20, name: '宠物' },
-      { value: 20, name: '吃饭' },
-      { value: 20, name: '出行' }
+      { value: 20, name: '伙食' },
+      { value: 20, name: '出行' },
+      { value: 20, name: '孩子' },
+      { value: 20, name: '父母' }
     ])
     const dataValue3 = reactive([
       { y: 80, x: '1月' },
@@ -78,9 +80,9 @@ export default {
       { y: 20, x: '5月' },
       { y: 20, x: '6月' }
     ])
-    const title1 = ref('收支占比')
-    const title2 = ref('支出分类')
-    const title3 = ref('近6月支出')
+    const title1 = ref('当月收支占比')
+    const title2 = ref('当月支出分类')
+    const title3 = ref('近6月收支')
     return {
       images, dataValue1, dataValue2, title1, title2, dataValue3, title3
     }
@@ -134,7 +136,7 @@ export default {
 
         &__item {
             width: 44%;
-            height: 30vh;
+            height: 25vh;
             margin: 0.08rem;
             box-shadow: 0px 0px 10px #ccc;
 
