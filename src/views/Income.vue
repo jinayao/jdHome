@@ -6,37 +6,40 @@
             <p class="income__message__pay">当月支出XXX元，比起上月增加x%</p>
         </div>
         <van-divider content-position="left">明细</van-divider>
-        <div class="income__control">
-            <div class="income__control__select">
-                <van-field v-model="selectValue" is-link readonly label="展示类型" placeholder="选择类型"
-                    @click="showPicker = true" />
-                <van-popup v-model:show="showPicker" position="bottom">
-                    <van-picker title="收支类型" :columns="columns" @confirm="onConfirm" @cancel="showPicker=false" />
-                </van-popup>
+        <div class="income__content">
+            <div class="income__control">
+                <div class="income__control__select">
+                    <van-field v-model="selectValue" is-link readonly label="展示类型" placeholder="选择类型"
+                        @click="showPicker = true" />
+                    <van-popup v-model:show="showPicker" position="bottom">
+                        <van-picker title="收支类型" :columns="columns" @confirm="onConfirm" @cancel="showPicker=false" />
+                    </van-popup>
+                </div>
+                <div class="income__control__add"></div>
             </div>
-            <div class="income__control__add"></div>
+            <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+                <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+                    <van-swipe-cell v-for="item in list" :key="item">
+                        <div class="income__item" @click="editItem(1)">
+                            <div class="income__item__type">
+                                <van-image width="0.4rem" height="0.4rem" fit="contain"
+                                    src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
+                            </div>
+                            <div class="income__item__content">
+                                <div class="income__item__content__time">2022-10-07 <span>9000</span></div>
+                                <div class="income__item__content__des">工资收入</div>
+                            </div>
+                        </div>
+                        <template #right>
+                            <van-button square text="删除" type="danger" class="delete-button" />
+                        </template>
+                    </van-swipe-cell>
+                </van-list>
+            </van-pull-refresh>
         </div>
-        <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-            <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-                <van-swipe-cell v-for="item in list" :key="item">
-                    <div class="income__item">
-                        <div class="income__item__type">
-                            <van-image width="0.4rem" height="0.4rem" fit="contain"
-                                src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
-                        </div>
-                        <div class="income__item__content">
-                            <div class="income__item__content__time">2022-10-07 <span>9000</span></div>
-                            <div class="income__item__content__des">工资收入</div>
-                        </div>
-                    </div>
-                    <template #right>
-                        <van-button square text="删除" type="danger" class="delete-button" />
-                    </template>
-                </van-swipe-cell>
-            </van-list>
-        </van-pull-refresh>
+
         <div class="income__add">
-            <van-button icon="plus" type="primary" round @click="addIncome"/>
+            <van-button icon="plus" type="primary" round @click="addIncome" />
         </div>
     </div>
 </template>
@@ -47,74 +50,79 @@ import { Toast } from 'vant'
 import { useRouter } from 'vue-router'
 // 选择相关操作
 const useSelectEffect = () => {
-  const selectValue = ref('全部')
-  const columns = ['全部', '收入', '支出']
-  const showPicker = ref(false)
-  const onConfirm = (value, index) => {
-    selectValue.value = value
-    showPicker.value = false
-  }
-  const onCancel = () => Toast('取消')
-  return { selectValue, columns, showPicker, onConfirm, onCancel }
+    const selectValue = ref('全部')
+    const columns = ['全部', '收入', '支出']
+    const showPicker = ref(false)
+    const onConfirm = (value, index) => {
+        selectValue.value = value
+        showPicker.value = false
+    }
+    const onCancel = () => Toast('取消')
+    return { selectValue, columns, showPicker, onConfirm, onCancel }
 }
 // 列表相关操作
 const useListEffect = () => {
-  const list = ref([])
-  const loading = ref(false)
-  const finished = ref(false)
-  const refreshing = ref(false)
-  const onLoad = () => {
-    setTimeout(() => {
-      if (refreshing.value) {
-        list.value = []
-        refreshing.value = false
-      }
+    const router = useRouter();
+    const list = ref([])
+    const loading = ref(false)
+    const finished = ref(false)
+    const refreshing = ref(false)
+    const onLoad = () => {
+        setTimeout(() => {
+            if (refreshing.value) {
+                list.value = []
+                refreshing.value = false
+            }
 
-      for (let i = 0; i < 10; i++) {
-        list.value.push(list.value.length + 1)
-      }
-      loading.value = false
+            for (let i = 0; i < 10; i++) {
+                list.value.push(list.value.length + 1)
+            }
+            loading.value = false
 
-      if (list.value.length >= 40) {
-        finished.value = true
-      }
-    }, 1000)
-  }
+            if (list.value.length >= 40) {
+                finished.value = true
+            }
+        }, 1000)
+    }
 
-  const onRefresh = () => {
-    // 清空列表数据
-    finished.value = false
+    const onRefresh = () => {
+        // 清空列表数据
+        finished.value = false
 
-    // 重新加载数据
-    // 将 loading 设置为 true，表示处于加载状态
-    loading.value = true
-    onLoad()
-  }
-  return { list, loading, finished, refreshing, onLoad, onRefresh }
+        // 重新加载数据
+        // 将 loading 设置为 true，表示处于加载状态
+        loading.value = true
+        onLoad()
+    }
+    const editItem = (id) => {
+        router.push({ name: 'addIncome', query: { id } })
+    }
+    return { list, loading, finished, refreshing, onLoad, onRefresh,editItem }
 }
 export default {
-  setup () {
-    const router = useRouter()
-    const onClickLeft = () => history.back()
-    const { list, loading, finished, refreshing, onLoad, onRefresh } = useListEffect()
-    const { selectValue, columns, showPicker, onConfirm, onCancel } = useSelectEffect()
-    const addIncome = ()=> router.push({name:'addIncome'})
-    return {
-      list,
-      onLoad,
-      loading,
-      finished,
-      onRefresh,
-      refreshing,
-      onClickLeft,
-      columns,
-      onCancel,
-      onConfirm,
-      showPicker,
-      selectValue,
-      addIncome
+    setup() {
+        const router = useRouter()
+        const onClickLeft = () => history.back()
+        const { list, loading, finished, refreshing, onLoad, onRefresh,editItem } = useListEffect()
+        const { selectValue, columns, showPicker, onConfirm, onCancel } = useSelectEffect()
+        const addIncome = () => router.push({ name: 'addIncome' })
+        return {
+            list,
+            onLoad,
+            loading,
+            finished,
+            onRefresh,
+            refreshing,
+            onClickLeft,
+            columns,
+            onCancel,
+            onConfirm,
+            showPicker,
+            selectValue,
+            addIncome,
+            editItem
+        }
     }
-  }
 }
 </script>
 
@@ -171,6 +179,12 @@ export default {
         }
     }
 
+    &__content {
+        height: calc(100vh - 2.3rem);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
     .van-divider {
         margin-bottom: 0;
         font-size: 12px;
@@ -214,8 +228,13 @@ export default {
 
     &__add {
         position: fixed;
-        bottom: 1rem;
+        bottom: 0.8rem;
         right: 0.2rem;
+
+        .van-button {
+            width: 0.4rem;
+            height: 0.4rem;
+        }
     }
 }
 </style>
